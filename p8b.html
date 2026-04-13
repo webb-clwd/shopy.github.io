@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Shop & Villas — Just UX</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* Animated gradient background */
+    body {
+      background: linear-gradient(-45deg, #2e026d, #3b82f6, #9333ea, #ec4899);
+      background-size: 400% 400%;
+      animation: gradientShift 20s ease infinite;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color: white;
+      overflow-x: hidden;
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Fade-up animation */
+    @keyframes fadeUp {
+      0% { opacity: 0; transform: translateY(30px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease-out;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+      animation: fadeUp 0.8s ease-out forwards;
+    }
+
+    /* Header shrink */
+    header.shrink {
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+      backdrop-filter: blur(12px);
+    }
+
+    /* Page visibility + crossfade (pages remain in flow to avoid cropping) */
+    .page {
+      opacity: 0;
+      transform: scale(0.995);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      pointer-events: none;
+    }
+    .page.active {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: auto;
+    }
+
+    /* Cinematic overlay used during page switches */
+    #pageOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0);
+      pointer-events: none;
+      transition: background 0.45s ease;
+      z-index: 60;
+    }
+    #pageOverlay.show {
+      background: rgba(0,0,0,0.75);
+      pointer-events: auto;
+    }
+
+    /* Modal backdrop */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.2s ease, visibility 0.2s ease;
+      z-index: 80;
+    }
+    .modal.active { visibility: visible; opacity: 1; }
+
+    /* Image container keeps aspect ratio so text never overlaps/cuts off */
+    .img-wrap {
+      aspect-ratio: 3 / 4; /* keeps images consistent */
+      overflow: hidden;
+      border-radius: 1rem;
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.03));
+    }
+    .img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .45s ease;
+    }
+
+    /* Product card layout ensures title + price always visible */
+    .product-card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      min-height: 16rem;
+    }
+
+    /* Glow on active nav button */
+    .nav-btn.active {
+      color: #a78bfa;
+      text-shadow: 0 0 8px #a78bfa, 0 0 20px rgba(167,139,250,0.25);
+      transition: all .25s ease;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sticky Header -->
+  <header id="header" class="fixed top-0 left-0 w-full bg-black/40 backdrop-blur-md z-50 py-6 text-center border-b border-white/10 transition-all duration-500">
+    <nav class="flex justify-center gap-10">
+      <button id="shopBtn" class="nav-btn text-white text-xl font-semibold transition">Shop</button>
+      <button id="villasBtn" class="nav-btn text-white text-xl font-semibold transition">Villas</button>
+    </nav>
+  </header>
+
+  <!-- Cinematic overlay for page switching -->
+  <div id="pageOverlay" aria-hidden="true"></div>
+
+  <!-- Main content -->
+  <main class="pt-36 pb-20 px-6 max-w-7xl mx-auto">
+
+    <!-- SHOP PAGE -->
+    <section id="shopPage" class="page active grid gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <!-- Product 1 -->
+      <article class="product-card fade-up cursor-pointer product" data-title="The Dandy Chair" data-price="£250" data-description="A timeless mid-century modern chair with elegant lines and durable build.">
+        <div class="img-wrap">
+          <img src="image/h1.jpg" alt="The Dandy Chair" class="hover:scale-105">
+        </div>
+        <div class="px-1">
+          <h4 class="font-semibold text-lg">The Dandy Chair</h4>
+          <p class="text-gray-200 mt-1">£250</p>
+        </div>
+      </article>
+
+      <!-- Product 2 -->
+      <article class="product-card fade-up cursor-pointer product" data-title="The Stanley Table" data-price="£125" data-description="A minimalist oak side table perfect for any modern living space.">
+        <div class="img-wrap">
+          <img src="image/h2.jpg" alt="Stanley Table" class="hover:scale-105">
+        </div>
+        <div class="px-1">
+          <h4 class="font-semibold text-lg">The Stanley Table</h4>
+          <p class="text-gray-200 mt-1">£125</p>
+        </div>
+      </article>
+
+      <!-- Product 3 -->
+      <article class="product-card fade-up cursor-pointer product" data-title="Nova Lamp" data-price="£89" data-description="A sleek, energy-efficient desk lamp that adds a warm glow to your workspace.">
+        <div class="img-wrap">
+          <img src="image/h3.jpg" alt="Nova Lamp" class="hover:scale-105">
+        </div>
+        <div class="px-1">
+          <h4 class="font-semibold text-lg">Nova Lamp</h4>
+          <p class="text-gray-200 mt-1">£89</p>
+        </div>
+      </article>
+
+      <!-- Product 4 -->
+      <article class="product-card fade-up cursor-pointer product" data-title="Andal Vase" data-price="£95" data-description="Handcrafted ceramic vase with soft curves and elegant matte finish.">
+        <div class="img-wrap">
+          <img src="image/h3.jpg" alt="Andal Vase" class="hover:scale-105">
+        </div>
+        <div class="px-1">
+          <h4 class="font-semibold text-lg">Andal Vase</h4>
+          <p class="text-gray-200 mt-1">£95</p>
+        </div>
+      </article>
+
+      <!-- Second row (Shop) -->
+      <article class="product-card fade-up cursor-pointer product" data-title="Luna Mirror" data-price="£180" data-description="Elegant round wall mirror with a thin gold frame that enhances any room.">
+        <div class="img-wrap">
+          <img src="image/h4.jpg" alt="Luna Mirror" class="hover:scale-105">
+        </div>
+        <div class="px-1">
+          <h4 class="font-semibold text-lg">Luna Mirror</h4>
+          <p class="text-gray-200 mt-1">£180</p>
+        </div>
+      </article>
+
+      <article class="product-card fade-up cursor-pointer product" data-title="Orion Clock" data-price="£135" data-description="Modern wall clock with silent mechanism and a touch of Scandinavian design.">
+        <div class="img-wrap">
+          <img src="image/h4.jpg" alt="Orion Clock" class="hover:scale-105">
+        </div>
+        <div class="px-1">
+          <h4 class="font-semibold text-lg">Orion Clock</h4>
+          <p class="text-gray-200 mt-1">£135</p>
+        </div>
+      </article>
+
+      <article class="product-card fade-up cursor-pointer product" data-title="Atlas Bookshelf" data-price="£320" data-description="Minimalist wooden bookshelf with adjustable shelves for versatile storage.">
+        <div class="img-wrap">
+          <img src="image/h5.jpg" alt="Atlas Bookshelf" class="hover:scale-105">
+        </div>
+        <div class="px-1">
+          <h4 class="font-semibold text-lg">Atlas Bookshelf</h4>
+          <p class="text-gray-200 mt-1">£320</p>
+        </div>
+      </article>
+
+      <article class="product-card fade-up cursor-pointer product" data-title="Seren Rug" data-price="£210" data-description="Soft textured wool rug that brings comfort and warmth to your interior.">
+        <div class="img-wrap">
+          <img src="image/h1.jpg" alt="Seren Rug" class="hover:scale-105">
+        </div>
+        <div class="px-1">
+          <h4 class="font-semibold text-lg">Seren Rug</h4>
+          <p class="text-gray-200 mt-1">£210</p>
+        </div>
+      </article>
+    </section>
+
+    <!-- VILLAS PAGE -->
+    <section id="villasPage" class="page grid gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4" aria-hidden="true">
+      <!-- Villa 1 -->
+      <article class="product-card fade-up cursor-pointer product" data-title="Sunset Villa" data-price="£650,000" data-description="Luxury villa with infinity pool and ocean views.">
+        <div class="img-wrap">
+          <img src="image/v1.jpg" alt="Sunset Villa" class="hover:scale-105">
+        </div>
+        <div class="px-1">
+          <h4 class="font-semibold text-lg">Sunset Villa</h4>
+          <p class="text-gray-200 mt-1">£650,000</p>
+        </div>
+      </article>
+
+      <!-- Villa 2 -->
+      <article class="product-card fade-up cursor-pointer product" data-title="Palm Estate" data-price="£890,000" data-description="Modern estate surrounded by tropical gardens and palm trees.">
+        <div class="img-wrap">
+          <img src="image/v2.jpg" alt="Palm Estate" class="hover:scale-105">
+        </div>
+        <div class="px-1">
+          <h4 class="font-semibold text-lg">Palm Estate</h4>
+          <p class="text-gray-200 mt-1">£890,000</p>
+        </div>
+      </article>
+
+      <!-- Villa 3 -->
+      <article class="product-card fade-up cursor-pointer product" data-title="Mountain View Retreat" data-price="£720,000" data-description="Secluded villa with panoramic mountain views and private spa.">
+        <div class="img-wrap">
+          <img src="image/v3.jpg" alt="Mountain View Retreat" class="hover:scale-105">
+        </div>
+        <div class="px-1">
+          <h4 class="font-semibold text-lg">Mountain View Retreat</h4>
+          <p class="text-gray-200 mt-1">£720,000</p>
+        </div>
+      </article>
+
+      <!-- Villa 4 -->
+      <article class="product-card fade-up cursor-pointer product" data-title="Beachfront Paradise" data-price="£1,200,000" data-description="Exclusive beachfront villa with private dock and infinity pool.">
+        <div class="img-wrap">
+          <img src="image/v4.jpg" alt="Beachfront Paradise" class="hover:scale-105">
+        </div>
+        <div class="px-1">
+          <h4 class="font-semibold text-lg">Beachfront Paradise</h4>
+          <p class="text-gray-200 mt-1">£1,200,000</p>
+        </div>
+      </article>
+
+      <!-- Additional villas (keeps grid complete) -->
+      <article class="product-card fade-up cursor-pointer product" data-title="Hilltop Manor" data-price="£980,000" data-description="Grand manor with terraced gardens and sunset views.">
+        <div class="img-wrap">
+          <img src="image/v5.jpg" alt="Hilltop Manor" class="hover:scale-105">
+        </div>
+        <div class="px-1">
+          <h4 class="font-semibold text-lg">Hilltop Manor</h4>
+          <p class="text-gray-200 mt-1">£980,000</p>
+        </div>
+      </article>
+
+      <article class="product-card fade-up cursor-pointer product" data-title="Lakeside Retreat" data-price="£760,000" data-description="Charming villa on the lake with private quay.">
+        <div class="img-wrap">
+          <img src="image/v1.jpg" alt="Lakeside Retreat" class="hover:scale-105">
+        </div>
+        <div class="px-1">
+          <h4 class="font-semibold text-lg">Lakeside Retreat</h4>
+          <p class="text-gray-200 mt-1">£760,000</p>
+        </div>
+      </article>
+
+      <article class="product-card fade-up cursor-pointer product" data-title="Garden Villa" data-price="£420,000" data-description="Cozy villa surrounded by lush private gardens.">
+        <div class="img-wrap">
+          <img src="image/v2.jpg" alt="Garden Villa" class="hover:scale-105">
+        </div>
+        <div class="px-1">
+          <h4 class="font-semibold text-lg">Garden Villa</h4>
+          <p class="text-gray-200 mt-1">£420,000</p>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <!-- Modal -->
+  <div id="productModal" class="modal" aria-hidden="true">
+    <div class="bg-white text-black rounded-2xl p-8 max-w-xl w-[92%] mx-4 text-center relative shadow-2xl">
+      <button id="closeModal" class="absolute top-3 right-3 text-gray-500 hover:text-black text-2xl">&times;</button>
+      <h2 id="modalTitle" class="text-2xl font-bold mb-2"></h2>
+      <p id="modalPrice" class="text-gray-600 mb-4"></p>
+      <p id="modalDescription" class="text-gray-700 mb-6"></p>
+      <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-full font-medium shadow-lg">Add to Cart</button>
+    </div>
+  </div>
+
+  <script>
+    // IntersectionObserver for fade-up
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.18 });
+
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    // Header shrink on scroll
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 60) header.classList.add('shrink');
+      else header.classList.remove('shrink');
+    });
+
+    // Modal functionality
+    const modal = document.getElementById('productModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalPrice = document.getElementById('modalPrice');
+    const modalDescription = document.getElementById('modalDescription');
+    const closeModal = document.getElementById('closeModal');
+
+    function openModalFromProduct(productEl) {
+      modalTitle.textContent = productEl.dataset.title || '';
+      modalPrice.textContent = productEl.dataset.price || '';
+      modalDescription.textContent = productEl.dataset.description || '';
+      modal.classList.add('active');
+      modal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeModalFn() {
+      modal.classList.remove('active');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+
+    document.querySelectorAll('.product').forEach(product => {
+      product.addEventListener('click', () => openModalFromProduct(product));
+    });
+    closeModal.addEventListener('click', closeModalFn);
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModalFn(); });
+
+    // Page switching with cinematic overlay + glow nav
+    const shopBtn = document.getElementById('shopBtn');
+    const villasBtn = document.getElementById('villasBtn');
+    const shopPage = document.getElementById('shopPage');
+    const villasPage = document.getElementById('villasPage');
+    const overlay = document.getElementById('pageOverlay');
+
+    // helpers
+    function setActiveNav(activeBtn, inactiveBtn) {
+      activeBtn.classList.add('active');
+      inactiveBtn.classList.remove('active');
+    }
+
+    // initial
+    setActiveNav(shopBtn, villasBtn);
+    shopPage.classList.add('active');
+    villasPage.style.display = 'none';
+    villasPage.setAttribute('aria-hidden', 'true');
+
+    function switchPages(showPage, hidePage, activeBtn, inactiveBtn) {
+      // show cinematic overlay
+      overlay.classList.add('show');
+
+      // short delay to allow overlay to darken
+      setTimeout(() => {
+        // hide old page
+        hidePage.classList.remove('active');
+        hidePage.setAttribute('aria-hidden', 'true');
+
+        // ensure both pages have display grid for consistent layout, then hide the old
+        hidePage.style.display = 'none';
+
+        // show new page (still invisible), then make active to fade it in
+        showPage.style.display = 'grid';
+        setTimeout(() => {
+          showPage.classList.add('active');
+          showPage.setAttribute('aria-hidden', 'false');
+
+          // remove overlay after new page has become visible
+          setTimeout(() => overlay.classList.remove('show'), 450);
+        }, 50);
+
+        setActiveNav(activeBtn, inactiveBtn);
+        // re-observe fade elements in the newly-visible page (in case not yet visible)
+        showPage.querySelectorAll('.fade-up').forEach(el => {
+          // reset to let IntersectionObserver animate again if desired
+          el.classList.remove('visible');
+          observer.observe(el);
+        });
+      }, 220);
+    }
+
+    shopBtn.addEventListener('click', () => {
+      if (shopPage.classList.contains('active')) return;
+      switchPages(shopPage, villasPage, shopBtn, villasBtn);
+    });
+
+    villasBtn.addEventListener('click', () => {
+      if (villasPage.classList.contains('active')) return;
+      switchPages(villasPage, shopPage, villasBtn, shopBtn);
+    });
+
+    // accessibility: keyboard close modal with Escape
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (modal.classList.contains('active')) closeModalFn();
+      }
+    });
+  </script>
+</body>
+</html>
