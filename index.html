@@ -8,6 +8,9 @@
   <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
+  <!--   font icon-->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
   <style>
     /* Animated gradient background */
     body {
@@ -118,6 +121,31 @@
       text-shadow: 0 0 8px #a78bfa, 0 0 20px rgba(167,139,250,0.25);
       transition: all .25s ease;
     }
+
+/*    ADD SEARCH ICON NAV  */
+
+/* Search expand animation */
+#searchContainer.active input {
+  width: 220px;
+  opacity: 1;
+  margin-right: 8px;
+}
+
+/* Smooth slide effect */
+#searchInput {
+  transform: translateX(20px);
+}
+
+#searchContainer.active #searchInput {
+  transform: translateX(0);
+}
+
+/* END OF ADDED SEARCH ICON */
+
+
+
+
+
   </style>
 </head>
 <body>
@@ -127,6 +155,31 @@
     <nav class="flex justify-center gap-10">
       <button id="shopBtn" class="nav-btn text-white text-xl font-semibold transition">Shop</button>
       <button id="villasBtn" class="nav-btn text-white text-xl font-semibold transition">Villas</button>
+
+ <!--  ADDED SEARCH icon BUTTON NAV-->
+<!-- Search Box -->
+<div id="searchContainer" class="absolute right-6 top-1/2 -translate-y-1/2 flex items-center">
+  
+  <!-- Input -->
+  <input 
+    id="searchInput"
+    type="text"
+    placeholder="Search..."
+    class="w-0 opacity-0 px-4 py-2 rounded-full bg-white/20 backdrop-blur-md text-white placeholder-white outline-none transition-all duration-500 ease-in-out"
+  />
+
+  <!-- Button -->
+  <button id="searchBtn" class="ml-2 text-white text-xl"> 
+    <i class="fas fa-search"></i>
+  </button>
+
+</div>
+<!-- END OF THE ADDED icon NAV-->
+
+
+
+
+
     </nav>
   </header>
 
@@ -203,7 +256,7 @@
         </div>
       </article>
 
-      <article class="product-card fade-up cursor-pointer product" data-title="Atlas Bookshelf" data-price="Ksh.2000" data-description="Minimalist comfy denim black skinny trouser.">
+      <article class="product-card fade-up cursor-pointer product" data-title="denim trouser" data-price="Ksh.2000" data-description="Minimalist comfy denim black skinny trouser.">
         <div class="img-wrap">
           <img src="image/h6.jpg" alt="denim trouser" class="hover:scale-105">
         </div>
@@ -213,7 +266,7 @@
         </div>
       </article>
 
-      <article class="product-card fade-up cursor-pointer product" data-title="Seren Rug" data-price="Ksh1000" data-description="Soft textured that brings comfort and warmth.">
+      <article class="product-card fade-up cursor-pointer product" data-title="denim jeans" data-price="Ksh1000" data-description="Soft textured that brings comfort and warmth.">
         <div class="img-wrap">
           <img src="image/h8.jpg" alt="denim jeans" class="hover:scale-105">
         </div>
@@ -425,6 +478,41 @@
         if (modal.classList.contains('active')) closeModalFn();
       }
     });
+
+
+
+//ADDED SEARCH ICON OPTION
+
+const searchBtn = document.getElementById('searchBtn');
+const searchContainer = document.getElementById('searchContainer');
+const searchInput = document.getElementById('searchInput');
+
+// Toggle search bar
+searchBtn.addEventListener('click', () => {
+  searchContainer.classList.toggle('active');
+
+  // Focus when opened
+  if (searchContainer.classList.contains('active')) {
+    setTimeout(() => searchInput.focus(), 300);
+  }
+});
+
+// OPTIONAL: simple filter for BOTH shop + villas
+searchInput.addEventListener('input', () => {
+  const value = searchInput.value.toLowerCase();
+  document.querySelectorAll('.product').forEach(item => {
+    const title = item.dataset.title.toLowerCase();
+    item.style.display = title.includes(value) ? 'block' : 'none';
+  });
+});
+
+//END OF ADDED SEARCH ICON
+
+
+
+
+
+
   </script>
 </body>
 </html>
