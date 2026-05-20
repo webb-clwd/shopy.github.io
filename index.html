@@ -143,15 +143,38 @@
 /* END OF ADDED SEARCH ICON */
 
 
+/* FOOTER SECTION */
 
+/* FOOTER */
+#floatingFooter {
+  transform: translateY(100%);
+  bottom: 0;
+  left: 0;
+}
 
+#floatingFooter.show {
+  transform: translateY(0);
+  opacity: 1;
+}
 
+/* END OF FOOTER */
+
+/* ===========Social menu open========= */
+#socialMenu.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* =========== END OF Social menu open========= */
   </style>
 </head>
 <body>
 
   <!-- Sticky Header -->
   <header id="header" class="fixed top-0 left-0 w-full bg-black/40 backdrop-blur-md z-50 py-6 text-center border-b border-white/10 transition-all duration-500">
+    
+    
     <nav class="flex justify-center gap-10">
       <button id="shopBtn" class="nav-btn text-white text-xl font-semibold transition">Boutique</button>
       <button id="villasBtn" class="nav-btn text-white text-xl font-semibold transition">Saloon</button>
@@ -182,6 +205,59 @@
 
     </nav>
   </header>
+  <!--=========    PROFILE ICON  TO DISPLAY FOOTER========= ----   -->
+<!-- Floating Footer -->
+ <button id="profileToggle"
+  class="fixed top-6 left-6 z-[100]
+         w-14 h-14 rounded-full
+         flex items-center justify-center
+         border border-pink-400/40
+         bg-gradient-to-br from-pink-400 via-purple-500 to-indigo-500
+         text-white text-2xl
+         shadow-[0_0_25px_rgba(236,72,153,0.45)]
+         hover:scale-110 hover:rotate-6
+         transition-all duration-500">
+
+  <i class="fa-solid fa-grip"></i>
+
+</button>
+
+<footer id="floatingFooter"
+  class="fixed bottom-0 left-0 w-full z-50
+         transform translate-y-[100%]
+         opacity-0
+         transition-all duration-700 ease-in-out
+         bg-black/20 backdrop-blur-xl
+         border-t border-white/10">
+
+  <div class="max-w-7xl mx-auto px-8 py-1
+              flex flex-col md:flex-row
+              items-center justify-between gap-6">
+
+    <!-- Left -->
+    <div class="flex items-center gap-3 text-white/40">
+      <span class="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse"></span>
+      <span class="text-sm md:text-base">Available for work</span>
+    </div>
+
+    <!-- Center -->
+    <button class="px-4 py-3 rounded-full
+                   bg-pink-400 text-black font-semibold
+                   hover:scale-105 hover:shadow-2xl
+                   transition-all duration-300">
+      Book a Saloon Session
+    </button>
+
+    <!-- Right -->
+    <h2 class="text-lg md:text-3xl font-light tracking-wide text-white/50 text-center">
+      LOOKING FOR A CLOTHING DESIGN?
+      <span class="text-pink-400 font-medium">LET'S TALK!</span>
+    </h2>
+
+  </div>
+</footer>
+    
+    <!----------=====----END OF PROFILE ICON --==========------>
 
   <!-- Cinematic overlay for page switching -->
   <div id="pageOverlay" aria-hidden="true"></div>
@@ -343,16 +419,29 @@
           <p class="text-gray-200 mt-1">Ksh. 1,200 - Ksh. 3,500</p>
         </div>
       </article>
+    
 
       <article class="product-card fade-up cursor-pointer product" data-title="Nails" data-price="Ksh.500 - Ksh.4,000" data-description="Manicure,gel polish, acrylic nails.">
         <div class="img-wrap">
-          <img src="image/s7.jpg" alt="nails">
+          <img src="image/s7.jpg" alt="nails" class="hover:scale-105" >
         </div>
         <div class="px-1">
           <h4 class="font-semibold text-lg">Nails</h4>
           <p class="text-gray-200 mt-1">Ksh.500 - Ksh.4000</p>
         </div>
       </article>
+    
+      <article class="product-card fade-up cursor-pointer product" data-title="Nails" data-price="Ksh.500 - Ksh.4,000" data-description="Manicure,gel polish, acrylic nails.">
+        <div class="img-wrap">
+          <img src="image/s8.jpg" alt="nails" class="hover:scale-105" >
+        </div>
+        <div class="px-1">
+          <h4 class="font-semibold text-lg">Nails</h4>
+          <p class="text-gray-200 mt-1">Ksh.500 - Ksh.4000</p>
+        </div>
+      </article>
+
+
     </section>
   </main>
 
@@ -366,6 +455,71 @@
       <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-full font-medium shadow-lg">Add to Cart</button>
     </div>
   </div>
+
+<!--=================== SOCIAL TOGGLE BUTTON ======================-->
+<div class="fixed bottom-6 right-6 z-[100] flex flex-col items-end gap-3">
+
+  <!-- Social Icons -->
+  <div id="socialMenu"
+       class="flex flex-col items-center gap-3
+              opacity-0 translate-y-6 pointer-events-none
+              transition-all duration-500 ease-in-out">
+
+    <!-- Facebook -->
+    <a href="#"
+       class="w-12 h-12 rounded-full
+              flex items-center justify-center
+              bg-blue-500 text-white text-xl
+              shadow-lg hover:scale-110 transition">
+      <i class="fab fa-facebook-f"></i>
+    </a>
+
+    <!-- TikTok -->
+    <a href="#"
+       class="w-12 h-12 rounded-full
+              flex items-center justify-center
+              bg-black text-white text-xl
+              border border-white/20
+              shadow-lg hover:scale-110 transition">
+      <i class="fab fa-tiktok"></i>
+    </a>
+
+    <!-- Instagram -->
+    <a href="#"
+       class="w-12 h-12 rounded-full
+              flex items-center justify-center
+              bg-gradient-to-br from-pink-500 via-red-500 to-yellow-400
+              text-white text-xl
+              shadow-lg hover:scale-110 transition">
+      <i class="fab fa-instagram"></i>
+    </a>
+
+  </div>
+
+  <!-- Main Button -->
+  <button id="socialToggle"
+    class="w-14 h-14 rounded-full
+           flex items-center justify-center
+           bg-gradient-to-br from-pink-400 via-purple-500 to-indigo-500
+           text-white text-2xl
+           shadow-[0_0_25px_rgba(236,72,153,0.45)]
+           hover:scale-110 hover:rotate-12
+           transition-all duration-500">
+
+    <i class="fa-solid fa-share-nodes"></i>
+
+  </button>
+
+</div>
+
+
+<!--=================== END OF  SOCIAL TOGGLE BUTTON ======================-->
+
+
+
+
+
+
 
   <script>
     // IntersectionObserver for fade-up
@@ -509,10 +663,28 @@ searchInput.addEventListener('input', () => {
 //END OF ADDED SEARCH ICON
 
 
+// FOOTER SECTION SCRIPT
+/* ADD THIS AT THE VERY BOTTOM OF YOUR <script> */
+const profileToggle = document.getElementById('profileToggle');
+const floatingFooter = document.getElementById('floatingFooter');
+
+profileToggle.addEventListener('click', () => {
+  floatingFooter.classList.toggle('show');
+});
+
+//END OF FOOTER SECTION
+
+// =============SOCIAL MENU
+const socialToggle = document.getElementById('socialToggle');
+const socialMenu = document.getElementById('socialMenu');
+
+socialToggle.addEventListener('click', () => {
+  socialMenu.classList.toggle('show');
+});
 
 
 
-
+// ========== END OF SOCIAL MENU=========
   </script>
 </body>
 </html>
